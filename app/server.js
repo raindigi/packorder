@@ -1,17 +1,29 @@
 require('dotenv').config();
-const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const { sequelize, models } = require('./models/');
-
-const { PORT } = process.env;
+const { PORT, MONGO_URL } = process.env;
 const app = express();
-const { Podcast } = models;
-app.use(cors());
+const { Order } = models;
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  next();
+});
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+mongoose
+  .connect(MONGO_URL, { useNewUrlParser: true })
+  .then(() => console.log('MongoDB Connected'))
+  .catch((err) => console.log(err));
 
 app.get('/', async (res) => {
-  await Podcast.findAll({
+  await Order.findAll({
     attributes: { exclude: ['id'] },
     limit: 2,
   })
@@ -27,7 +39,7 @@ app.get('/', async (res) => {
 sequelize
   .sync()
   .then(() => {
-    app.listen(PORT, () => console.log(`listening to podcast ${PORT}`));
+    app.listen(PORT, () => console.log(`listening to ${PORT}`));
     console.log('success');
   })
   .catch(() => console.error('fail'));
