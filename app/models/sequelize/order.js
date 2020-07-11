@@ -1,12 +1,13 @@
 const order = (sequelize, DataTypes) => {
-  const Orders = sequelize.define('post', {
+  const Order = sequelize.define('order', {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
+      primaryKey: true,
       unique: true,
       allowNull: false,
     },
     created_at: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     order_name: {
@@ -14,12 +15,12 @@ const order = (sequelize, DataTypes) => {
       allowNull: false,
     },
     customer_id: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING(1234),
       allowNull: false,
     },
   });
 
-  return Orders;
+  return Order;
 };
 
 module.exports = order;
