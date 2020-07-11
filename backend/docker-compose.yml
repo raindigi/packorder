@@ -1,0 +1,22 @@
+version: '3'
+services:
+  redis:
+    image: redis:5.0.5
+    ports:
+      - '6379:6379'
+  dbpost:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=orders
+  dbmongo:
+    image: mongo
+    environment: 
+      - MONGO_INITDB_DATABASE=customers
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=packform
+    ports:
+      - 27017:27017
