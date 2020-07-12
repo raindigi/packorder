@@ -1,4 +1,4 @@
-const sequelize = require('../databaseAuthentication');
+const sequelize = require('../sequelizeAuthentication');
 
 const models = {
   Order: sequelize.import('./sequelize/order.js'),

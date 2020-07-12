@@ -7,4 +7,4 @@ if [ ! -f ./app/.env ]; then
 fi
 
 # Start the podcast server
-docker-compose up -d redis dbpost dbmongo
+docker-compose up -d redis dbpost dbmongo1 dbmongo2

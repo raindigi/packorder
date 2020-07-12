@@ -11,12 +11,16 @@ async function dataTransformer(tableTo, fileName) {
         order_name: data.order_name,
         customer_id: data.customer_id,
       }));
+      // eslint-disable-next-line
+      break;
     case 'Delivery':
       return data.map((data) => ({
         id: parseInt(data.id),
         order_item_id: parseInt(data.order_item_id),
         delivered_quantity: parseInt(data.delivered_quantity),
       }));
+      // eslint-disable-next-line
+      break;
     case 'Order Items':
       return data.map((data) => ({
         id: parseInt(data.id),
@@ -25,6 +29,8 @@ async function dataTransformer(tableTo, fileName) {
         quantity: parseInt(data.quantity),
         product: data.product,
       }));
+      // eslint-disable-next-line
+      break;
     case 'User':
       return data.map((data) => ({
         user_id: data.user_id,
@@ -34,6 +40,15 @@ async function dataTransformer(tableTo, fileName) {
         company_id: data.company_id,
         credit_cards: data.credit_cards,
       }));
+      // eslint-disable-next-line
+      break;
+    case 'Company':
+      return data.map((data) => ({
+        company_id: data.company_id,
+        company_name: data.company_name,
+      }));
+      // eslint-disable-next-line
+      break;
     default:
       break;
   }

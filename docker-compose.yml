@@ -12,7 +12,7 @@ services:
       - POSTGRES_PASSWORD=mysecretpassword
       - POSTGRES_USER=postgres
       - POSTGRES_DB=orders
-  dbmongo:
+  dbmongo1:
     image: mongo
     environment: 
       - MONGO_INITDB_DATABASE=customers
@@ -22,3 +22,13 @@ services:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     ports:
       - 27017:27017
+  dbmongo2:
+    image: mongo
+    environment: 
+      - MONGO_INITDB_DATABASE=company
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=packform
+    volumes:
+      - ./init-mongo_2.js:/docker-entrypoint-initdb.d/init-mongo_2.js:ro
+    ports:
+      - 27018:27017
