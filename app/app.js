@@ -25,6 +25,15 @@ async function dataTransformer(tableTo, fileName) {
         quantity: parseInt(data.quantity),
         product: data.product,
       }));
+    case 'User':
+      return data.map((data) => ({
+        user_id: data.user_id,
+        login: data.login,
+        password: data.password,
+        name: data.name,
+        company_id: data.company_id,
+        credit_cards: data.credit_cards,
+      }));
     default:
       break;
   }

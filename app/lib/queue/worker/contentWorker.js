@@ -1,7 +1,16 @@
+require('dotenv').config();
 const { dataTransformer } = require('../../../app');
 const { sequelize, models } = require('../../../models/');
-
+const mongoose = require('mongoose');
 const { Order, Delivery, OrderItem } = models;
+const { MONGO_URL } = process.env;
+const User = require('../../../models/mongoose/user');
+const Company = require('../../../models/mongoose/user');
+
+mongoose
+  .connect(MONGO_URL, { useNewUrlParser: true })
+  .then(() => console.log('MongoDB Connected'))
+  .catch((err) => console.log(err));
 
 const fetchContent = async (job) => {
   const { data } = job;
@@ -42,6 +51,12 @@ const fetchContent = async (job) => {
           }),
         ),
       );
+      break;
+    case 'User':
+      User.insertMany(feed);
+      break;
+    case 'Company':
+      Company.insertMany(feed);
       break;
 
     default:
