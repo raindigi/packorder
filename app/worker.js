@@ -1,6 +1,6 @@
 const { OrderWorkerQueue } = require('./lib/queue');
 const moment = require('moment');
-const { sequelize } = require('./models/');
+const { db } = require('./models/sequelize');
 const { fetchContent } = require('./lib/queue/worker/contentWorker');
 
 const onFailFetchContent = async (job, err) => {
@@ -15,7 +15,7 @@ const onCompleteFetchContent = (job, feed) => {
   return latestTimestamp < oneMonthAgo;
 };
 
-sequelize.sync({}).then(() => {
+db.sequelize.sync({}).then(() => {
   OrderWorkerQueue.process('*', fetchContent);
   OrderWorkerQueue.on('failed', onFailFetchContent);
   OrderWorkerQueue.on('completed', onCompleteFetchContent);

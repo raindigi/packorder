@@ -2,9 +2,9 @@
 // const Company = require('../models/mongoose/Company');
 const express = require('express');
 const router = express.Router();
-const { models } = require('../models');
+const { db } = require('../models/sequelize');
 
-const { Order, OrderItem } = models;
+const { Order, OrderItem, Delivery } = db;
 
 router.get('/order', async (_, res) => {
   // User.findById(req.params._id, (err, pet) => {
@@ -17,24 +17,40 @@ router.get('/order', async (_, res) => {
   //     res.status(404).send('Item not found');
   //   }
   // });
-  const feed = await Order.findAll({
-    attributes: { exclude: ['createdAt', 'updatedAt'] },
+  const orders = await Order.findAll({
+    attributes: {
+      exclude: ['createdAt', 'updatedAt'],
+    },
     include: [
       {
         model: OrderItem,
-        as: 'orderItem',
+        as: 'OrderItem',
       },
     ],
-    order: [
-      ['createdAt', 'DESC'],
-      ['created_at', 'DESC'],
-    ],
+    order: [['created_at', 'DESC']],
     limit: 100,
     raw: true,
   });
-  console.log(feed);
+  const deliveries = await Delivery.findAll({
+    attributes: {
+      exclude: ['createdAt', 'updatedAt', 'id'],
+    },
+    include: [
+      {
+        model: OrderItem,
+        as: 'OrderItem',
+      },
+    ],
+
+    limit: 100,
+    raw: true,
+  });
+
   res.send({
-    data: feed.map((item) => ({
+    orders: orders.map((item) => ({
+      ...item,
+    })),
+    deliveries: deliveries.map((item) => ({
       ...item,
     })),
   });
