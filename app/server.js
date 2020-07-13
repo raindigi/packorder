@@ -6,10 +6,12 @@ const { sequelize, models } = require('./models/');
 const { PORT } = process.env;
 const app = express();
 const { Order } = models;
+const routes = require('./routes');
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(routes);
 
 app.get('/', async (res) => {
   await Order.findAll({
