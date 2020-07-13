@@ -1,5 +1,5 @@
-// const User = require('../models/mongoose/user');
-// const Company = require('../models/mongoose/Company');
+const User = require('../models/mongoose/user');
+const Company = require('../models/mongoose/Company');
 const express = require('express');
 const router = express.Router();
 const { db } = require('../models/sequelize');
@@ -7,16 +7,8 @@ const { db } = require('../models/sequelize');
 const { Order, OrderItem, Delivery } = db;
 
 router.get('/order', async (_, res) => {
-  // User.findById(req.params._id, (err, pet) => {
-  //   if (err) {
-  //     console.log('RETRIEVE error: ' + err);
-  //     res.status(500).send('Error');
-  //   } else if (pet) {
-  //     res.status(200).json(pet);
-  //   } else {
-  //     res.status(404).send('Item not found');
-  //   }
-  // });
+  const customerCollection = await User.find({}, ' -credit_cards -_id -password -__v');
+  const companyCollection = await Company.find({}, ' -_id  -__v');
   const orders = await Order.findAll({
     attributes: {
       exclude: ['createdAt', 'updatedAt'],
@@ -31,6 +23,7 @@ router.get('/order', async (_, res) => {
     limit: 100,
     raw: true,
   });
+
   const deliveries = await Delivery.findAll({
     attributes: {
       exclude: ['createdAt', 'updatedAt', 'id'],
@@ -41,7 +34,6 @@ router.get('/order', async (_, res) => {
         as: 'OrderItem',
       },
     ],
-
     limit: 100,
     raw: true,
   });
@@ -52,6 +44,12 @@ router.get('/order', async (_, res) => {
     })),
     deliveries: deliveries.map((item) => ({
       ...item,
+    })),
+    customer: customerCollection.map((item) => ({
+      ...item._doc,
+    })),
+    customer_company: companyCollection.map((item) => ({
+      ...item._doc,
     })),
   });
 });

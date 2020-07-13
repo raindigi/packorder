@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Verify env file is present
-if [ ! -f ./app/.env ]; then
+if [ ! -f ./backend/.env ]; then
   echo ".env file not set"
   exit 1
 fi

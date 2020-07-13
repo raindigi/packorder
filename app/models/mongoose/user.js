@@ -8,7 +8,7 @@ const userSchema = new Schema({
   login: { type: String },
   password: { type: String },
   name: { type: String },
-  company_id: { type: String, ref: 'Company' },
+  company_id: { type: Number, ref: 'Company' },
   credit_cards: { type: Array },
 });
 

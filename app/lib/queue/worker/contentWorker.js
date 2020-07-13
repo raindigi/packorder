@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { dataTransformer } = require('../../../app');
+const { dataTransformer } = require('../../../functions/app');
 const { db } = require('../../../models/sequelize/');
 const { Order, Delivery, OrderItem } = db;
 const User = require('../../../models/mongoose/user');
@@ -19,7 +19,7 @@ const fetchContent = async (job) => {
   console.log(feed);
   switch (name) {
     case 'Order':
-      await db.transaction((transaction) =>
+      await db.sequelize.transaction((transaction) =>
         Promise.all(
           feed.map((order) => {
             return Order.upsert(order, { transaction });
@@ -28,7 +28,7 @@ const fetchContent = async (job) => {
       );
       break;
     case 'Delivery':
-      await db.transaction((transaction) =>
+      await db.sequelize.transaction((transaction) =>
         Promise.all(
           feed.map((delivery) => {
             return Delivery.upsert(delivery, { transaction });
@@ -37,7 +37,7 @@ const fetchContent = async (job) => {
       );
       break;
     case 'Order Items':
-      await db.transaction((transaction) =>
+      await db.sequelize.transaction((transaction) =>
         Promise.all(
           feed.map((items) => {
             return OrderItem.upsert(items, { transaction });

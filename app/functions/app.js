@@ -1,6 +1,6 @@
 const csv = require('csvtojson');
 const moment = require('moment');
-
+const _ = require('lodash');
 async function dataTransformer(tableTo, fileName) {
   const data = await csv().fromFile(fileName);
   switch (tableTo) {
@@ -37,14 +37,14 @@ async function dataTransformer(tableTo, fileName) {
         login: data.login,
         password: data.password,
         name: data.name,
-        company_id: data.company_id,
+        company_id: parseInt(data.company_id),
         credit_cards: data.credit_cards,
       }));
       // eslint-disable-next-line
       break;
     case 'Company':
       return data.map((data) => ({
-        company_id: data.company_id,
+        company_id: parseInt(data.company_id),
         company_name: data.company_name,
       }));
       // eslint-disable-next-line
@@ -54,4 +54,14 @@ async function dataTransformer(tableTo, fileName) {
   }
 }
 
-module.exports = { dataTransformer };
+function mergeCustomerData(customer, company) {
+  return customer.map((employee) => {
+    for (let iterator = 0; iterator < company.length; iterator++) {
+      if (company[iterator].company_id === employee.company_id) {
+        _.merge(employee, company[iterator]);
+      }
+    }
+  });
+}
+
+module.exports = { dataTransformer, mergeCustomerData };
