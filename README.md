@@ -37,7 +37,7 @@ then start with installing dependencies on the backend and start it before proce
 ```bash
 cd backend 
 npm i && npm run start
-if you want to query the backend http://localhost:8080/orders
+#if you want to query the backend http://localhost:8080/orders
 ```
 now get out of the backend and start moving towards the frontend
 
@@ -47,10 +47,22 @@ $ cd ../
 $ npm i && npm run dev
 # By default if nothing is running on the machine it will come out on localhost:3000
 ```
-
+### Shutting down
+```bash
+#assuming your on the frontend
+ctrl + c 
+cd ../
+docker-compose down
+cd backend
+ctrl + c
+```
 
 ## Built With
 
 - [Node.js](https://nodejs.org/en/): JavaScript run-time and main development language.
+- [Bull](https://github.com/OptimalBits/bull): Queue manager
+- [Redis](https://redis.io/): - Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.
+- [PostGres](https://www.postgresql.org/): - PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
+- [MongoDB](https://www.mongodb.com/): - MongoDB is a document database, which means it stores data in JSON-like documents.
 - [npm](https://www.npmjs.com/get-npm): Node.js package manager.
 - [Docker](https://www.docker.com/): Docker for deploying containers
