@@ -3,7 +3,11 @@ export const state = () => ({
   orderData: [],
 })
 
-export const getters = {}
+export const getters = {
+  serveOrderData: (state) => {
+    return state.orderData
+  },
+}
 
 export const mutations = {
   getOrderData(state, data) {

@@ -17,14 +17,6 @@ export default {
     )
     this.$store.commit('orders/getOrderData', data)
   },
-  data() {
-    return {
-      orders: [],
-      deliveries: [],
-      customer: [],
-      company: [],
-    }
-  },
 }
 </script>
 

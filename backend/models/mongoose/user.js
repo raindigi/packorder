@@ -7,7 +7,7 @@ const userSchema = new Schema({
   user_id: { type: String, unique: true },
   login: { type: String },
   password: { type: String },
-  name: { type: String },
+  fullname: { type: String },
   company_id: { type: Number, ref: 'Company' },
   credit_cards: { type: Array },
 });

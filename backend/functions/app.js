@@ -7,7 +7,7 @@ async function dataTransformer(tableTo, fileName) {
     case 'Order':
       return data.map((data) => ({
         id: parseInt(data.id),
-        created_at: moment(data.created_at).toDate(),
+        created_at: moment(data.created_at).format('LLL'),
         order_name: data.order_name,
         customer_id: data.customer_id,
       }));
@@ -37,7 +37,7 @@ async function dataTransformer(tableTo, fileName) {
         user_id: data.user_id,
         login: data.login,
         password: data.password,
-        name: data.name,
+        fullname: data.name,
         company_id: parseInt(data.company_id),
         credit_cards: data.credit_cards,
       }));

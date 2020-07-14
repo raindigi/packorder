@@ -1,16 +1,24 @@
 <template>
   <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">
-        Orders
-      </h1>
-    </div>
+    <b-container fluid>
+      <FilterTable />
+    </b-container>
   </div>
 </template>
 
 <script>
-export default {}
+import FilterTable from '../components/FilterTable'
+export default {
+  components: {
+    FilterTable,
+  },
+  async fetch() {
+    const data = await fetch('http://localhost:8080/order').then((res) =>
+      res.json()
+    )
+    this.$store.commit('orders/getOrderData', data)
+  },
+}
 </script>
 
 <style>
