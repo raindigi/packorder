@@ -11,8 +11,6 @@ export const getters = {
 
 export const mutations = {
   getOrderData(state, data) {
-    const output = []
-    const reducer = (accumulator, currentValue) => accumulator + currentValue
     const mergeById = (customer, a2) =>
       customer.map((itm) => ({
         ...a2.find((item) => item.company_id === itm.company_id && item),
@@ -29,9 +27,9 @@ export const mutations = {
         ...itm,
       }))
 
-    const mergeByOrderId = (order, orderItem) =>
-      order.map((itm) => ({
-        ...orderItem.find((item) => item.order_id === itm.id && item),
+    const mergeByOrderId = (customerData, orderItemData) =>
+      orderItemData.map((itm) => ({
+        ...customerData.find((item) => item.id === itm.order_id && item),
         ...itm,
       }))
 
@@ -44,7 +42,7 @@ export const mutations = {
       data.deliveries
     )
 
-    const accumulator = orderAndDelivery.map((data) => ({
+    const nullRemover = orderAndDelivery.map((data) => ({
       id: data.id,
       order_item_id: data.order_item_id,
       delivery_identifier: data.delivery_identifier,
@@ -64,34 +62,7 @@ export const mutations = {
       product: data.product,
     }))
 
-    accumulator.forEach(function (item) {
-      const existing = output.filter(function (v, i) {
-        return v.order_id === item.order_id
-      })
-      if (existing.length) {
-        const existingIndex = output.indexOf(existing[0])
-        output[existingIndex].product = output[existingIndex].product.concat(
-          item.product
-        )
-        output[existingIndex].total = output[existingIndex].total.concat(
-          item.total
-        )
-        output[existingIndex].total_delivered = output[
-          existingIndex
-        ].total_delivered.concat(item.total_delivered)
-      } else {
-        if (
-          typeof item.price_per_unit !== 'undefined' &&
-          typeof item.product === 'string'
-        )
-          item.total = [item.total]
-        item.total_delivered = [item.total_delivered]
-        item.product = [item.product]
-        output.push(item)
-      }
-    })
-
-    const orderTransfomer = output.map((data) => ({
+    const orderTransfomer = nullRemover.map((data) => ({
       id: data.id,
       order_item_id: data.order_item_id,
       delivery_identifier: data.delivery_identifier,
@@ -99,8 +70,8 @@ export const mutations = {
       order_id: data.order_id,
       price_per_unit: data.price_per_unit,
       quantity: data.quantity,
-      total: data.total.reduce(reducer),
-      total_delivered: data.total_delivered.reduce(reducer),
+      total: data.total,
+      total_delivered: data.total_delivered,
       product: data.product,
     }))
 
