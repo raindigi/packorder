@@ -11,15 +11,17 @@ router.get('/order', async (_, res) => {
   const companyCollection = await Company.find({}, ' -_id  -__v');
   const orders = await Order.findAll({
     attributes: {
+      exclude: ['createdAt', 'updatedAt,'],
+    },
+
+    order: [['created_at', 'DESC']],
+    limit: 100,
+    raw: true,
+  });
+  const orderItems = await OrderItem.findAll({
+    attributes: {
       exclude: ['createdAt', 'updatedAt'],
     },
-    include: [
-      {
-        model: OrderItem,
-        as: 'OrderItem',
-      },
-    ],
-    order: [['created_at', 'DESC']],
     limit: 100,
     raw: true,
   });
@@ -28,21 +30,22 @@ router.get('/order', async (_, res) => {
     attributes: {
       exclude: ['createdAt', 'updatedAt', 'id'],
     },
-    include: [
-      {
-        model: OrderItem,
-        as: 'OrderItem',
-      },
-    ],
     limit: 100,
     raw: true,
   });
+
+  let extendedSet = new Set([...companyCollection, ...customerCollection]);
+
+  console.log(extendedSet);
 
   res.send({
     orders: orders.map((item) => ({
       ...item,
     })),
     deliveries: deliveries.map((item) => ({
+      ...item,
+    })),
+    orderItems: orderItems.map((item) => ({
       ...item,
     })),
     customer: customerCollection.map((item) => ({

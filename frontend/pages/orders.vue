@@ -10,25 +10,7 @@
 </template>
 
 <script>
-export default {
-  async asyncData(context) {
-    try {
-      return await fetch('http://localhost:8080/order')
-        .then((res) => res.json())
-        .then((data) => {
-          return { orders: data }
-        })
-    } catch (error) {
-      // eslint-disable next-line
-      console.error('something went wrong :' + error)
-    }
-  },
-  data() {
-    return {
-      orders: [],
-    }
-  },
-}
+export default {}
 </script>
 
 <style>

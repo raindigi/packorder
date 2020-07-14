@@ -10,7 +10,22 @@
 </template>
 
 <script>
-export default {}
+export default {
+  async fetch() {
+    const data = await fetch('http://localhost:8080/order').then((res) =>
+      res.json()
+    )
+    this.$store.commit('orders/getOrderData', data)
+  },
+  data() {
+    return {
+      orders: [],
+      deliveries: [],
+      customer: [],
+      company: [],
+    }
+  },
+}
 </script>
 
 <style>
