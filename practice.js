@@ -1,67 +1,17 @@
-const delivery = [
-  {
-    order_item_id: 1,
-    delivered_quantity: 5,
-  },
-  {
-    order_item_id: 2,
-    delivered_quantity: 11,
-  },
-  {
-    order_item_id: 3,
-    delivered_quantity: 12,
-  },
-  {
-    order_item_id: 4,
-    delivered_quantity: 3,
-  },
-  {
-    order_item_id: 6,
-    delivered_quantity: 15,
-  },
-  {
-    order_item_id: 7,
-    delivered_quantity: 8,
-  },
-  {
-    order_item_id: 8,
-    delivered_quantity: 3,
-  },
-  {
-    order_item_id: 16,
-    delivered_quantity: 25,
-  },
-  {
-    order_item_id: 17,
-    delivered_quantity: 26,
-  },
-  {
-    order_item_id: 18,
-    delivered_quantity: 27,
-  },
-  {
-    order_item_id: 19,
-    delivered_quantity: 28,
-  },
-  {
-    order_item_id: 20,
-    delivered_quantity: 29,
-  },
-  {
-    order_item_id: 4,
-    delivered_quantity: 5,
-  },
-  {
-    order_item_id: 8,
-    delivered_quantity: 8,
-  },
-  {
-    order_item_id: 8,
-    delivered_quantity: 6,
-  },
-]
+weatherData = (state) => {
+  return state.weatherData.map((data) => ({
+    id: parseInt(data.id),
+    order_name: data.order_name,
+    company_name: data.company_name,
+    name: data.name,
+    temp: data._weatherTemp === undefined ? 0 : parseInt(data._weatherTemp),
+    orderDate: moment.unix(data.created_at).format('LLL'),
+    deliveredAmount: parseFloat(data.price_per_unit * data.delivered_quantity),
+    totalAmount: parseFloat(data.price_per_unit * data.quantity),
+  }))
+}
 
-const orderItems = [
+const data = [
   {
     id: 1,
     order_id: 1,
@@ -203,9 +153,174 @@ const orderItems = [
     product: 'Hand sanitizer',
   },
 ]
+
+const data2 = [
+  {
+    id: 1,
+    delivery_identifier: 1,
+    order_item_id: 1,
+    delivered_quantity: 5,
+  },
+  {
+    id: 2,
+    delivery_identifier: 2,
+    order_item_id: 2,
+    delivered_quantity: 11,
+  },
+  {
+    id: 3,
+    delivery_identifier: 3,
+    order_item_id: 3,
+    delivered_quantity: 12,
+  },
+  {
+    id: 4,
+    delivery_identifier: 4,
+    order_item_id: 4,
+    delivered_quantity: 3,
+  },
+  {
+    id: 5,
+    delivery_identifier: 5,
+    order_item_id: 6,
+    delivered_quantity: 15,
+  },
+  {
+    id: 6,
+    delivery_identifier: 6,
+    order_item_id: 7,
+    delivered_quantity: 8,
+  },
+  {
+    id: 7,
+    delivery_identifier: 7,
+    order_item_id: 8,
+    delivered_quantity: 3,
+  },
+  {
+    id: 8,
+    delivery_identifier: 8,
+    order_item_id: 16,
+    delivered_quantity: 25,
+  },
+  {
+    id: 9,
+    delivery_identifier: 9,
+    order_item_id: 17,
+    delivered_quantity: 26,
+  },
+  {
+    id: 10,
+    delivery_identifier: 10,
+    order_item_id: 18,
+    delivered_quantity: 27,
+  },
+  {
+    id: 11,
+    delivery_identifier: 11,
+    order_item_id: 19,
+    delivered_quantity: 28,
+  },
+  {
+    id: 12,
+    delivery_identifier: 12,
+    order_item_id: 20,
+    delivered_quantity: 29,
+  },
+  {
+    id: 13,
+    delivery_identifier: 13,
+    order_item_id: 4,
+    delivered_quantity: 5,
+  },
+  {
+    id: 14,
+    delivery_identifier: 14,
+    order_item_id: 8,
+    delivered_quantity: 8,
+  },
+  {
+    id: 15,
+    delivery_identifier: 15,
+    order_item_id: 8,
+    delivered_quantity: 6,
+  },
+]
+
 const mergeDeliveryAndOrderItem = (orderItem, delivery) =>
   orderItem.map((itm) => ({
     ...delivery.find((item) => item.order_item_id === itm.id && item),
     ...itm,
   }))
-console.log(mergeDeliveryAndOrderItem(orderItems, delivery))
+
+const mng = mergeDeliveryAndOrderItem(data, data2)
+
+const accumulator = mng.map((data) => ({
+  id: data.id,
+  order_item_id: data.order_item_id,
+  delivery_identifier: data.delivery_identifier,
+  delivered_quantity: data.delivered_quantity,
+  order_id: data.order_id,
+  price_per_unit: data.price_per_unit,
+  quantity: data.quantity,
+  total:
+    typeof data.price_per_unit === null
+      ? '-'
+      : data.quantity * data.price_per_unit,
+  total_delivered:
+    typeof (data.delivered_quantity * data.price_per_unit) === 'number' &&
+    typeof (data.delivered_quantity * data.price_per_unit) !== NaN
+      ? data.delivered_quantity * data.price_per_unit
+      : '-',
+  product: data.product,
+}))
+
+const output = []
+accumulator.forEach(function (item) {
+  const existing = output.filter(function (v, i) {
+    return v.order_id === item.order_id
+  })
+  if (existing.length) {
+    const existingIndex = output.indexOf(existing[0])
+    output[existingIndex].product = output[existingIndex].product.concat(
+      item.product
+    )
+    output[existingIndex].total = output[existingIndex].total.concat(item.total)
+    output[existingIndex].total_delivered = output[
+      existingIndex
+    ].total_delivered.concat(item.total_delivered)
+  } else {
+    if (
+      typeof item.price_per_unit !== 'undefined' &&
+      typeof item.product === 'string'
+    )
+      item.total = [item.total]
+    item.total_delivered = [item.total_delivered]
+    item.product = [item.product]
+    output.push(item)
+  }
+})
+
+console.log('===========================================================')
+console.log(accumulator)
+
+console.log('===========================================================')
+console.log(output)
+
+console.log('===========================================================')
+const accumulator2 = output.map((data) => ({
+  id: data.id,
+  order_item_id: data.order_item_id,
+  delivery_identifier: data.delivery_identifier,
+  delivered_quantity: data.delivered_quantity,
+  order_id: data.order_id,
+  price_per_unit: data.price_per_unit,
+  quantity: data.quantity,
+  total: data.total.reduce(reducer),
+  total_delivered: isNaN(data.total_delivered.reduce(reducer))
+    ? '-'
+    : data.total_delivered.reduce(reducer),
+  product: data.product,
+}))
+console.log('===========================================================')
+console.log(accumulator2)

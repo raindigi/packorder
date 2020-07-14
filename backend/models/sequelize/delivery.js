@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false,
     },
+    delivery_identifier: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     order_item_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

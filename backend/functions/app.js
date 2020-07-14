@@ -16,6 +16,7 @@ async function dataTransformer(tableTo, fileName) {
     case 'Delivery':
       return data.map((data) => ({
         id: parseInt(data.id),
+        delivery_identifier: parseInt(data.id),
         order_item_id: parseInt(data.order_item_id),
         delivered_quantity: parseInt(data.delivered_quantity),
       }));

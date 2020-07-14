@@ -28,7 +28,7 @@ router.get('/order', async (_, res) => {
 
   const deliveries = await Delivery.findAll({
     attributes: {
-      exclude: ['createdAt', 'updatedAt', 'id'],
+      exclude: ['createdAt', 'updatedAt'],
     },
     limit: 100,
     raw: true,
