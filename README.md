@@ -46,6 +46,8 @@ $ cd ../
 # Start application
 $ npm i && npm run dev
 # By default if nothing is running on the machine it will come out on localhost:3000
+# It takes 2 minutes or so for the data to be fetched due to the queue that I made, so if it does not fetch the data
+# try restarting the backend or just wait
 ```
 ### Shutting down
 ```bash
