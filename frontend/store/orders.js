@@ -1,10 +1,6 @@
 // I used vuex to try and consolidate state as much as possible
 export const state = () => ({
   orderData: [],
-  customerData: [],
-  companyData: [],
-  deliveryData: [],
-  tableData: [],
 })
 
 export const getters = {}
@@ -43,12 +39,6 @@ export const mutations = {
       orderAndDelivery
     )
 
-    // eslint-disable-next-line
-    console.log(orderItemsAndCustomer)
-
-    state.orderData = data
-    state.companyData = data
-    state.customerData = data
-    state.deliveryData = data
+    state.orderData = orderItemsAndCustomer
   },
 }
