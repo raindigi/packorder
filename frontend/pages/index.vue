@@ -3,8 +3,13 @@
     <div>
       <Logo />
       <h1 class="title">
-        Packorder
+        Pack Order
       </h1>
+      <div class="links">
+        <nuxt-link to="/orders" class="button--green">
+          Orders
+        </nuxt-link>
+      </div>
     </div>
   </div>
 </template>

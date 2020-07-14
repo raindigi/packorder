@@ -1,7 +1,16 @@
 <template>
   <div class="container">
     <b-container fluid>
+      <Logo />
+      <h1 class="title">
+        Orders
+      </h1>
       <FilterTable />
+      <div class="links">
+        <nuxt-link to="/" class="button--green">
+          Orders
+        </nuxt-link>
+      </div>
     </b-container>
   </div>
 </template>

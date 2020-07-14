@@ -27,20 +27,15 @@
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-        <b-form-group
-          label="Filter On"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          description="Leave all unchecked to filter on all data"
-          class="mb-0"
-        >
-          <b-form-checkbox-group v-model="filterOn" class="mt-1">
-            <b-form-checkbox value="name">Country</b-form-checkbox>
-            <b-form-checkbox value="age">Weather Condition</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
+      <b-col sm="7" md="6" class="my-1">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          align="fill"
+          size="sm"
+          class="my-0"
+        ></b-pagination>
       </b-col>
     </b-row>
 
@@ -52,6 +47,8 @@
       :items="serveOrderData"
       :fields="fields"
       :filter="filter"
+      :current-page="currentPage"
+      :per-page="perPage"
       :filter-included-fields="filterOn"
       @filtered="onFiltered"
     >
@@ -123,8 +120,10 @@ export default {
           sortByFormatted: true,
           filterByFormatted: true,
         },
-        { key: 'actions', label: 'Actions' },
       ],
+
+      perPage: 5,
+      pageOptions: [5, 10, 15],
       totalRows: 1,
       currentPage: 1,
       sortBy: '',
@@ -141,7 +140,6 @@ export default {
   },
   computed: {
     sortOptions() {
-      // Create an options list from our fields
       return this.fields
         .filter((f) => f.sortable)
         .map((f) => {
@@ -151,7 +149,6 @@ export default {
     ...mapGetters('orders', ['serveOrderData']),
   },
   mounted() {
-    // Set the initial number of items
     this.totalRows = this.serveOrderData.length
   },
   methods: {
@@ -165,7 +162,6 @@ export default {
       this.infoModal.content = ''
     },
     onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length
       this.currentPage = 1
     },

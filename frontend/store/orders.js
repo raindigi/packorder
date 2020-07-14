@@ -48,17 +48,19 @@ export const mutations = {
       id: data.id,
       order_item_id: data.order_item_id,
       delivery_identifier: data.delivery_identifier,
-      delivered_quantity: data.delivered_quantity,
+      delivered_quantity:
+        data.delivered_quantity === undefined ? 0 : data.price_per_unit,
       order_id: data.order_id,
-      price_per_unit: data.price_per_unit,
+      price_per_unit: data.price_per_unit === null ? 0 : data.price_per_unit,
       quantity: data.quantity,
-      total: isNaN(data.price_per_unit)
-        ? '-'
-        : data.quantity * data.price_per_unit,
+      total:
+        data.price_per_unit === null
+          ? '-'
+          : Math.abs(data.quantity * data.price_per_unit),
       total_delivered:
-        typeof (data.delivered_quantity * data.price_per_unit) === 'number'
-          ? data.delivered_quantity * data.price_per_unit
-          : '-',
+        data.delivered_quantity === undefined
+          ? 0
+          : data.delivered_quantity * data.price_per_unit,
       product: data.product,
     }))
 
@@ -88,7 +90,8 @@ export const mutations = {
         output.push(item)
       }
     })
-    const finalOrderTransfomer = output.map((data) => ({
+
+    const orderTransfomer = output.map((data) => ({
       id: data.id,
       order_item_id: data.order_item_id,
       delivery_identifier: data.delivery_identifier,
@@ -97,15 +100,13 @@ export const mutations = {
       price_per_unit: data.price_per_unit,
       quantity: data.quantity,
       total: data.total.reduce(reducer),
-      total_delivered: isNaN(data.total_delivered.reduce(reducer))
-        ? '-'
-        : data.total_delivered.reduce(reducer),
+      total_delivered: data.total_delivered.reduce(reducer),
       product: data.product,
     }))
 
     const orderItemsAndCustomer = mergeByOrderId(
       orderAndCustomer,
-      finalOrderTransfomer
+      orderTransfomer
     )
     // eslint-disable-next-line
     console.log(orderItemsAndCustomer)
