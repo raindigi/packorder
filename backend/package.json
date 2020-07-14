@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon ./server.js",
     "start:worker": "nodemon ./worker.js",
-    "start": "concurrently -n web,worker \"npm run start:dev\" \"npm run start:worker\""
+    "start": "concurrently -n web,worker \"npm run start:dev\" \"npm run start:worker\"",
+    "lint": "eslint . && prettier --check '**' --ignore-path ./.eslintignore"
   },
   "keywords": [],
   "author": "",
